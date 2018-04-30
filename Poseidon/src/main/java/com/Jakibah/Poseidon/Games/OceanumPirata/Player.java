@@ -26,11 +26,11 @@ public class Player extends Entity {
 	@Override
 	public void update(){
 		super.update();
-		collider.setBounds((int)this.getPosition().x, (int)this.getPosition().y, 32, 32);
 		
 		
 	}
 	public Rectangle getCollider() {
+		collider.setBounds((int) this.getPosition().x, (int) this.getPosition().y, 32,32);
 		return collider;
 	}
 	public void setCollider(Rectangle collider) {

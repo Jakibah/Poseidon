@@ -2,6 +2,8 @@ package com.Jakibah.Poseidon.Games.OceanumPirata.World;
 
 import java.awt.Rectangle;
 
+import org.joml.Vector2f;
+
 import com.Jakibah.Poseidon.Engine.Window;
 import com.Jakibah.Poseidon.Engine.Utils.Maths;
 import com.Jakibah.Poseidon.Games.OceanumPirata.Utils.ChunkGenerator;
@@ -15,6 +17,35 @@ public class Chunk {
 	private World world;
 
 	public static final int SIZE = 100;
+	
+	public static boolean anyCollision(Rectangle r, Tile[][] tiles) {
+		
+		
+		for(int i = 0; i < tiles.length; i++) {
+			for(int j = 0; j < tiles[i].length; j++) {
+				if(Maths.isColliding(r, tiles[i][j].getCollider()) && tiles[i][j].isSolid()) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+public  Tile anyCollision(Vector2f mouse, Tile[][] tiles) {
+		
+		Rectangle r = new Rectangle();
+		r.setBounds((int)mouse.x, (int)mouse.y, 1, 1);
+		for(int i = 0; i < tiles.length; i++) {
+			for(int j = 0; j < tiles[i].length; j++) {
+				if(Maths.isColliding(r, tiles[i][j].getCollider())) {
+					return tiles[i][j];
+				}
+			}
+		}
+		return null;
+	}
+	
 
 	public Chunk(int xId, int yId, ChunkGenerator cg, World parent) {
 		super();
@@ -65,16 +96,17 @@ public class Chunk {
 
 	public Tile getTileAt(float x, float y) {
 
-		for (int i = 0; i < tiles.length; i++) {
-			for (int j = 0; j < tiles[i].length; j++) {
-				if (x >= tiles[i][j].getPosition().x && x <= tiles[i][j].getPosition().x + 32) {
-					if (y >= tiles[i][j].getPosition().y && y <= tiles[i][j].getPosition().y + 32) {
-						return tiles[i][j];
-					}
-				}
-			}
-		}
-		return null;
+		x -= xId * SIZE * 32;
+		y -= yId * SIZE * 32;
+		
+		x = x/32;
+		y = y/32;
+		
+		x = (float) Math.floor(x);
+		y = (float) Math.floor(y);
+		
+		return tiles[(int) x][(int) y];
+		
 	}
 
 	public void update() {

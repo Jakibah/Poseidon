@@ -31,7 +31,7 @@ public class OceanumPirata extends App {
 	}
 
 	public static void main(String[] args) {
-		Window.createCanvas("Oceanum Pirata", 2160, 1440, new OceanumPirata(new Game()));
+		Window.createCanvas("Oceanum Pirata", 2160/2, 1440/2, new OceanumPirata(new Game()));
 
 	}
 

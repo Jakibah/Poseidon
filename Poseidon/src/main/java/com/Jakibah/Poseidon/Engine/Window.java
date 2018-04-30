@@ -1,5 +1,6 @@
 package com.Jakibah.Poseidon.Engine;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
@@ -31,6 +32,8 @@ public class Window {
 	public static MasterRenderer masterRenderer;
 	public static float factorX, factorY;
 	public static boolean[] Keyboard = new boolean[100];
+	public static Vector2f Cursor = new Vector2f();
+	public static boolean[] Mouse = new boolean[12];
 	public static int width, height;
 
 	public static void createCanvas(String name, int Width, int Height, App app) {
@@ -85,6 +88,21 @@ public class Window {
 				Keyboard[key] = false;
 			}
 
+		});
+		
+		GLFW.glfwSetCursorPosCallback(window, (window, x, y)->{
+			Cursor.x = (float) x;
+			Cursor.y = (float) y;
+		});
+		
+		GLFW.glfwSetMouseButtonCallback(window, (window, button, action, mods)->{
+			System.out.println(button);
+			if(button < Mouse.length && action == GLFW.GLFW_PRESS) {
+				Mouse[button] = true;
+			}
+			if(button < Mouse.length && action == GLFW.GLFW_RELEASE) {
+				Mouse[button] = false;
+			}
 		});
 		
 		//GLFW.glfwSetMouseButtonCallback(window, cbfun);

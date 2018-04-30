@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.joml.Vector2f;
 
+import com.Jakibah.Poseidon.Engine.Window;
 import com.Jakibah.Poseidon.Engine.Utils.SimplexNoise;
 import com.Jakibah.Poseidon.Games.OceanumPirata.Player;
 import com.Jakibah.Poseidon.Games.OceanumPirata.Utils.TerrainGenerator;
@@ -28,6 +29,8 @@ public class World {
 		new SimplexNoise(seed_);
 		activeChunks.add(new Chunk(startXId, startYId, new TerrainGenerator(), this));
 	}
+	
+	
 	
 	public static void update() {
 		activeChunks.removeAll(activeChunksToRemove);
@@ -64,6 +67,16 @@ public class World {
 
 	public static void setSeed(int seed) {
 		World.seed_ = seed;
+	}
+
+
+
+	public static Vector2f mouseToWorldCoords(Player player) {
+		Vector2f toReturn = new Vector2f();
+		toReturn.x = Window.Cursor.x + player.getPosition().x - (Window.width/2);
+		toReturn.y = Window.Cursor.y + player.getPosition().y - (Window.height/2);
+		System.out.println(toReturn.x + ", " + toReturn.y);
+		return toReturn;
 	}
 
 }

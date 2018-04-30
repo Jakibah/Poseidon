@@ -16,7 +16,7 @@ public class Game extends GameState {
 	@Override
 	public void start() {
 		 	DataBank.init();
-			p = new Player(new Vector3f(1600, 1600, 0),0,0,0,1);
+			p = new Player(new Vector3f(1600, 1600, 0.001f),0,0,0,1);
 			new World(-1039093906, new Vector2f(p.getPosition().x, p.getPosition().y), p);
 	}
 

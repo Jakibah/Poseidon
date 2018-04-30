@@ -1,15 +1,20 @@
 package com.Jakibah.Poseidon.Games.OceanumPirata.Components;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import com.Jakibah.Poseidon.Engine.Component;
 import com.Jakibah.Poseidon.Engine.Entity;
 import com.Jakibah.Poseidon.Engine.Window;
 import com.Jakibah.Poseidon.Engine.Utils.Maths;
+import com.Jakibah.Poseidon.Games.OceanumPirata.DataBank;
+import com.Jakibah.Poseidon.Games.OceanumPirata.Player;
+import com.Jakibah.Poseidon.Games.OceanumPirata.World.Chunk;
 import com.Jakibah.Poseidon.Games.OceanumPirata.World.Tile;
+import com.Jakibah.Poseidon.Games.OceanumPirata.World.TileType;
 import com.Jakibah.Poseidon.Games.OceanumPirata.World.World;
 
 public class PlayerController extends Component {
-	
+
 	private int speed = 10;
 
 	public PlayerController(Entity parent) {
@@ -22,29 +27,65 @@ public class PlayerController extends Component {
 	@Override
 	public void update() {
 		if (Window.Keyboard[GLFW.GLFW_KEY_W] == true) {
-			Tile t = World.getChunkAtCoords(this.getParent().getPosition().x, this.getParent().getPosition().y - speed)
-					.getTileAt(this.getParent().getPosition().x, this.getParent().getPosition().y - speed);
-			if (!t.isSolid())
-				this.getParent().increasePosition(0, -speed, 0);
+			Move(0, -speed);
 		}
+
 		if (Window.Keyboard[GLFW.GLFW_KEY_A] == true) {
-			Tile t = World.getChunkAtCoords(this.getParent().getPosition().x - speed, this.getParent().getPosition().y)
-					.getTileAt(this.getParent().getPosition().x - speed, this.getParent().getPosition().y);
-			if (!t.isSolid())
-				this.getParent().increasePosition(-speed, 0, 0);
+			Move(-speed, 0);
+
 		}
 		if (Window.Keyboard[GLFW.GLFW_KEY_S] == true) {
-			Tile t = World.getChunkAtCoords(this.getParent().getPosition().x, this.getParent().getPosition().y+32)
-					.getTileAt(this.getParent().getPosition().x, this.getParent().getPosition().y+32);
-			if (!t.isSolid())
-				this.getParent().increasePosition(0, speed, 0);
+			Move(0, speed);
 		}
 		if (Window.Keyboard[GLFW.GLFW_KEY_D] == true) {
-			Tile t = World.getChunkAtCoords(this.getParent().getPosition().x+32, this.getParent().getPosition().y)
-					.getTileAt(this.getParent().getPosition().x+32, this.getParent().getPosition().y);
-			if (!t.isSolid())
-				this.getParent().increasePosition(speed, 0, 0);
+			Move(speed, 0);
 		}
-	}
+		Vector2f mouse = World.mouseToWorldCoords(((Player)this.getParent()));
+		Chunk c = World.getChunkAtCoords(mouse.x, mouse.y);
+		Tile t = c.anyCollision(mouse, c.getTiles());
+		t.setModel(DataBank.TEST_TILE);
+		}
+
+	public void Move(float x, float y) {
+
+		
+			for (int i = 0; i < (Math.abs(x)) - 1; i++) {
+				if (x > 0) {
+				Chunk c = World.getChunkAtCoords(this.getParent().getPosition().x + 1, this.getParent().getPosition().y);
+				this.getParent().increasePosition(1, 0, 0);
+				if (Chunk.anyCollision(((Player) this.getParent()).getCollider(), c.getTiles())) {
+					
+					this.getParent().increasePosition(-1, 0, 0);
+				}
+			}
+		 else if (x < 0) {
+				Chunk c = World.getChunkAtCoords(this.getParent().getPosition().x -1, this.getParent().getPosition().y);
+			this.getParent().increasePosition(-1, 0, 0);
+			if (Chunk.anyCollision(((Player) this.getParent()).getCollider(), c.getTiles())) {
+				
+				this.getParent().increasePosition(1, 0, 0);
+			}
+		}
+		}
+		
+			for (int i = 0; i < (Math.abs(y)) - 1; i++) {
+				if (y > 0) {
+					Chunk c = World.getChunkAtCoords(this.getParent().getPosition().x , this.getParent().getPosition().y+1);
+				this.getParent().increasePosition(0, 1, 0);
+				if (Chunk.anyCollision(((Player) this.getParent()).getCollider(), c.getTiles())) {
+					
+					this.getParent().increasePosition(0, -1, 0);
+				}
+			}
+		 else if (y < 0) {
+				Chunk c = World.getChunkAtCoords(this.getParent().getPosition().x, this.getParent().getPosition().y-1);
+			this.getParent().increasePosition(0, -1, 0);
+			if (Chunk.anyCollision(((Player) this.getParent()).getCollider(), c.getTiles())) {
+				
+				this.getParent().increasePosition(0, 1, 0);
+			}
+		}
+
+	}}
 
 }
